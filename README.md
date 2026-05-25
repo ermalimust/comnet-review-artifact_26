@@ -6,10 +6,10 @@ The artifact is intended for peer review. It avoids manuscript metadata, reviewe
 
 ## Contents
 
-- `scripts/`: DES simulation, aggregation, revision audits, coefficient sensitivity, observable-descriptor audit, non-stationary shift audit, and figure generation scripts.
+- `scripts/`: DES simulation, aggregation, revision audits, coefficient sensitivity, observable-descriptor audit, frequency-identifiability audit, non-stationary shift audit, and figure generation scripts.
 - `scripts/ns3/`: NS-3 runner, scratch scenario, packet-trace postprocessing, held-out evaluation, and seed-pair audit scripts.
 - `outputs/des_20seed_summary/`: 20-seed DES aggregate CSV files and generated table snippets.
-- `outputs/revision_audits/`: statistical, sensitivity, observable-descriptor, risk-weight, and non-stationary audit outputs.
+- `outputs/revision_audits/`: statistical, sensitivity, observable-descriptor, frequency-identifiability, risk-weight, and non-stationary audit outputs.
 - `outputs/ns3_10seed_summary/`: 10-seed NS-3 window-level summaries, held-out metrics, and seed-fold metrics.
 - `tables/`: LaTeX table snippets used in the revised manuscript.
 - `figures/`: PGFPlots/TikZ figure sources used to generate the revised manuscript figures.
@@ -58,6 +58,7 @@ Additional revision audits:
 $seedText = "7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83"
 python scripts\coefficient_sensitivity.py --seeds $seedText --outdir outputs/revision_audits --table-dir tables/des
 python scripts\model_blind_descriptors.py --seeds $seedText --outdir outputs/revision_audits --table-dir tables/des
+python scripts\identifiability_audit.py --seeds $seedText --outdir outputs/revision_audits --table-dir tables/des
 python scripts\nonstationarity_shift_audit.py --seeds $seedText --outdir outputs/revision_audits --table-dir tables/des
 ```
 
