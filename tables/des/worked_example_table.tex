@@ -1,0 +1,12 @@
+\begin{tabular}{p{0.27\linewidth}p{0.17\linewidth}p{0.17\linewidth}p{0.31\linewidth}}
+\toprule
+View & Nominal risk & Calibrated score & Operational reading \\
+\midrule
+Static queueing & 0.186 & 0.186 & Load-only view; does not expose the interruption-heavy window. \\
+No residual margin & 0.292 & 0.292 & Structured inputs raise the score but give no calibration buffer. \\
+No interruption descriptors & 0.279 & 0.678 & Removing unavailable-time descriptors lowers the protected score. \\
+Service-only view & 0.160 & 0.704 & Service moments alone leave the window less exposed. \\
+Adaptive calibrated score & 0.292 & 0.915 & Validation margin moves the window into the protected-action candidate set. \\
+EWMA calibrated baseline & 0.341 & 1.026 & Temporal persistence also flags the row, but without descriptor-level attribution. \\
+\bottomrule
+\end{tabular}
