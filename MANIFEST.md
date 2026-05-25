@@ -4,7 +4,7 @@ This file summarizes the review artifact contents and how each group maps to the
 
 ## Scripts
 
-- `scripts/run_simulation.py`: DES simulator and model/baseline evaluation.
+- `scripts/run_simulation.py`: DES simulator, learned tail-scale calibration protocol, and model/baseline evaluation.
 - `scripts/aggregate_results.py`: DES multi-seed aggregation and table generation.
 - `scripts/revision_audits.py`: seed-level bootstrap/Wilcoxon audit and risk-weight audit.
 - `scripts/coefficient_sensitivity.py`: correction-coefficient sensitivity audit.

@@ -66,6 +66,24 @@ class WindowSample:
     empirical: Dict[str, float]
 
 
+@dataclass
+class TailScaleCalibration:
+    beta_service: float = 1.0
+    beta_vacation: float = 1.0
+    beta_queue: float = 0.5
+    kappa_p99: float = 1.35
+    sigma_min: float = 0.02
+
+    def as_dict(self) -> Dict[str, float]:
+        return {
+            "beta_service": self.beta_service,
+            "beta_vacation": self.beta_vacation,
+            "beta_queue": self.beta_queue,
+            "kappa_p99": self.kappa_p99,
+            "sigma_min": self.sigma_min,
+        }
+
+
 def percentile(values: Sequence[float], q: float) -> float:
     if not values:
         return 0.0
@@ -447,7 +465,32 @@ class ThetaProjector:
         return {key: {"lower": lo, "upper": hi} for key, (lo, hi) in self.bounds.items()}
 
 
-def queueing_analyzer(theta: Dict[str, float], risk_margin: float = 0.0, violation_tau: float = 0.5) -> Dict[str, float]:
+def tail_scale_features(service_var: float, v2: float, wait: float) -> Tuple[float, float, float]:
+    return (
+        math.sqrt(max(0.0, service_var)),
+        math.sqrt(max(0.0, v2)),
+        max(0.0, wait),
+    )
+
+
+def learned_tail_scale(
+    features: Tuple[float, float, float],
+    calibration: TailScaleCalibration,
+) -> float:
+    return max(
+        calibration.sigma_min,
+        calibration.beta_service * features[0]
+        + calibration.beta_vacation * features[1]
+        + calibration.beta_queue * features[2],
+    )
+
+
+def queueing_analyzer(
+    theta: Dict[str, float],
+    risk_margin: float = 0.0,
+    violation_tau: float = 0.5,
+    tail_calibration: TailScaleCalibration | None = None,
+) -> Dict[str, float]:
     lam = max(EPS, theta["lambda"])
     m1 = max(EPS, theta["m1"])
     m2 = max(m1 * m1, theta["m2"])
@@ -470,13 +513,19 @@ def queueing_analyzer(theta: Dict[str, float], risk_margin: float = 0.0, violati
     wait = mg1_wait + vacation_wait + burst_wait
     delay = wait + m1
     service_var = max(0.0, m2 - m1 * m1)
-    tail_scale = math.sqrt(service_var + v2 + 0.25 * wait * wait + EPS)
-    p95 = delay + 1.64 * tail_scale
-    p99 = delay + 2.33 * tail_scale
-    if violation_tau <= delay:
-        violation = min(1.0, 0.50 + (delay - violation_tau) / max(delay + tail_scale, EPS))
+    if tail_calibration is None:
+        tail_scale = math.sqrt(service_var + v2 + 0.25 * wait * wait + EPS)
+        p95 = delay + 1.64 * tail_scale
+        p99 = delay + 2.33 * tail_scale
+        if violation_tau <= delay:
+            violation = min(1.0, 0.50 + (delay - violation_tau) / max(delay + tail_scale, EPS))
+        else:
+            violation = math.exp(-(violation_tau - delay) / max(tail_scale, 0.02))
     else:
-        violation = math.exp(-(violation_tau - delay) / max(tail_scale, 0.02))
+        tail_scale = learned_tail_scale(tail_scale_features(service_var, v2, wait), tail_calibration)
+        p95 = delay + tail_scale
+        p99 = delay + tail_calibration.kappa_p99 * tail_scale
+        violation = (p95 - violation_tau) / max(tail_scale, tail_calibration.sigma_min)
     violation = max(0.0, min(1.0, violation))
 
     risk = delay + 0.35 * p95 + 1.5 * violation
@@ -562,6 +611,7 @@ def calibrate_margin(
     model: MultiTargetLogModel,
     projector: ThetaProjector,
     violation_tau: float,
+    tail_calibration: TailScaleCalibration | None = None,
     theta_transform=None,
 ) -> float:
     residuals: List[float] = []
@@ -569,9 +619,81 @@ def calibrate_margin(
         pred_theta = projector.project(model.predict(sample))
         if theta_transform is not None:
             pred_theta = theta_transform(pred_theta)
-        pred = queueing_analyzer(pred_theta, violation_tau=violation_tau)
+        pred = queueing_analyzer(pred_theta, violation_tau=violation_tau, tail_calibration=tail_calibration)
         residuals.append(abs(pred["risk"] - sample.empirical["risk"]))
     return percentile(residuals, 0.90) if residuals else 0.0
+
+
+def solve_3x3(matrix: List[List[float]], vector: List[float]) -> List[float]:
+    a = [row[:] + [rhs] for row, rhs in zip(matrix, vector)]
+    n = 3
+    for col in range(n):
+        pivot = max(range(col, n), key=lambda row: abs(a[row][col]))
+        if abs(a[pivot][col]) < EPS:
+            return [1.0, 1.0, 0.5]
+        if pivot != col:
+            a[col], a[pivot] = a[pivot], a[col]
+        scale = a[col][col]
+        for j in range(col, n + 1):
+            a[col][j] /= scale
+        for row in range(n):
+            if row == col:
+                continue
+            factor = a[row][col]
+            for j in range(col, n + 1):
+                a[row][j] -= factor * a[col][j]
+    return [a[row][n] for row in range(n)]
+
+
+def fit_tail_scale_calibration(
+    samples: Sequence[WindowSample],
+    model: MultiTargetLogModel,
+    projector: ThetaProjector,
+    violation_tau: float,
+) -> TailScaleCalibration:
+    xtx = [[0.0 for _ in range(3)] for _ in range(3)]
+    xty = [0.0, 0.0, 0.0]
+    beta_prior = [1.0, 1.0, 0.5]
+    ridge = 1.0
+    for sample in samples:
+        theta = projector.project(model.predict(sample))
+        nominal = queueing_analyzer(theta, violation_tau=violation_tau, tail_calibration=None)
+        wait = max(0.0, nominal["delay_mean"] - theta["m1"])
+        service_var = max(0.0, theta["m2"] - theta["m1"] * theta["m1"])
+        feats = tail_scale_features(service_var, theta["v2"], wait)
+        target_p95 = max(0.0, sample.empirical["p95"] - nominal["delay_mean"])
+        for i in range(3):
+            xty[i] += feats[i] * target_p95
+            for j in range(3):
+                xtx[i][j] += feats[i] * feats[j]
+    for i in range(3):
+        xtx[i][i] += ridge
+        xty[i] += ridge * beta_prior[i]
+    beta = [max(0.0, value) for value in solve_3x3(xtx, xty)]
+    beta = [min(3.0, value) for value in beta]
+    if sum(beta) <= EPS:
+        beta = [1.0, 1.0, 0.5]
+
+    p99_num = 0.0
+    p99_den = 0.0
+    for idx, sample in enumerate(samples):
+        theta = projector.project(model.predict(sample))
+        nominal = queueing_analyzer(theta, violation_tau=violation_tau, tail_calibration=None)
+        wait = max(0.0, nominal["delay_mean"] - theta["m1"])
+        service_var = max(0.0, theta["m2"] - theta["m1"] * theta["m1"])
+        feats = tail_scale_features(service_var, theta["v2"], wait)
+        scale = max(0.02, beta[0] * feats[0] + beta[1] * feats[1] + beta[2] * feats[2])
+        target_p99 = max(0.0, sample.empirical["p99"] - nominal["delay_mean"])
+        p99_num += scale * target_p99
+        p99_den += scale * scale
+    kappa_p99 = max(1.0, min(4.0, p99_num / max(EPS, p99_den)))
+    return TailScaleCalibration(
+        beta_service=beta[0],
+        beta_vacation=beta[1],
+        beta_queue=beta[2],
+        kappa_p99=kappa_p99,
+        sigma_min=0.02,
+    )
 
 
 def calibrate_direct_margin(
@@ -853,7 +975,8 @@ def evaluate(
     blackbox = MultiTargetLogModel(METRIC_KEYS, alpha=0.05)
     blackbox.fit(fit_samples, source="empirical")
 
-    base_margin = calibrate_margin(val_samples, structured, projector, violation_tau)
+    tail_calibration = fit_tail_scale_calibration(val_samples, structured, projector, violation_tau)
+    base_margin = calibrate_margin(val_samples, structured, projector, violation_tau, tail_calibration=tail_calibration)
     direct_conformal_margin = calibrate_direct_margin(val_samples, blackbox, lambda pred: pred["risk"])
     tail_metric_margin = calibrate_direct_margin(val_samples, blackbox, tail_metric_score)
     direct_p95_margin = calibrate_metric_margin(val_samples, blackbox, "p95")
@@ -863,6 +986,7 @@ def evaluate(
         structured,
         projector,
         violation_tau,
+        tail_calibration=tail_calibration,
         theta_transform=m1_only_theta,
     )
     no_vacation_margin = calibrate_margin(
@@ -870,6 +994,7 @@ def evaluate(
         structured,
         projector,
         violation_tau,
+        tail_calibration=tail_calibration,
         theta_transform=remove_vacation_theta,
     )
     m1_only_margin = calibrate_margin(
@@ -877,6 +1002,7 @@ def evaluate(
         structured,
         projector,
         violation_tau,
+        tail_calibration=tail_calibration,
         theta_transform=m1_only_theta,
     )
     static_theta = average_theta(fit_samples)
@@ -897,15 +1023,31 @@ def evaluate(
         m1_only_margin_k = margin_scale * m1_only_margin * drift_multiplier
 
         predictions: Dict[str, Dict[str, float]] = {}
-        predictions["oracle_queueing"] = queueing_analyzer(sample.theta, risk_margin=0.0, violation_tau=violation_tau)
-        predictions["static_queueing"] = queueing_analyzer(static_theta, risk_margin=0.0, violation_tau=violation_tau)
+        predictions["oracle_queueing"] = queueing_analyzer(
+            sample.theta,
+            risk_margin=0.0,
+            violation_tau=violation_tau,
+            tail_calibration=tail_calibration,
+        )
+        predictions["static_queueing"] = queueing_analyzer(
+            static_theta,
+            risk_margin=0.0,
+            violation_tau=violation_tau,
+            tail_calibration=tail_calibration,
+        )
 
         proposed_theta = projector.project(structured.predict(sample))
-        predictions["proposed_laq"] = queueing_analyzer(proposed_theta, risk_margin=margin, violation_tau=violation_tau)
+        predictions["proposed_laq"] = queueing_analyzer(
+            proposed_theta,
+            risk_margin=margin,
+            violation_tau=violation_tau,
+            tail_calibration=tail_calibration,
+        )
         predictions["proposed_adaptive_margin"] = queueing_analyzer(
             proposed_theta,
             risk_margin=adaptive_margin,
             violation_tau=violation_tau,
+            tail_calibration=tail_calibration,
         )
 
         if include_ablations:
@@ -913,16 +1055,19 @@ def evaluate(
                 proposed_theta,
                 risk_margin=0.0,
                 violation_tau=violation_tau,
+                tail_calibration=tail_calibration,
             )
             predictions["ablation_no_vacation"] = queueing_analyzer(
                 remove_vacation_theta(proposed_theta),
                 risk_margin=no_vacation_margin_k,
                 violation_tau=violation_tau,
+                tail_calibration=tail_calibration,
             )
             predictions["ablation_m1_only"] = queueing_analyzer(
                 m1_only_theta(proposed_theta),
                 risk_margin=m1_only_margin_k,
                 violation_tau=violation_tau,
+                tail_calibration=tail_calibration,
             )
 
         bb_pred = blackbox.predict(sample)
@@ -1038,6 +1183,7 @@ def evaluate(
         "kingman_no_vacation_margin": kingman_margin,
         "ablation_no_vacation_margin": no_vacation_margin,
         "ablation_m1_only_margin": m1_only_margin,
+        "tail_scale_calibration": tail_calibration.as_dict(),
         "margin_scale": margin_scale,
         "include_ablations": include_ablations,
         "violation_tau": violation_tau,

@@ -6,7 +6,7 @@ The artifact is intended for peer review. It avoids manuscript metadata, reviewe
 
 ## Contents
 
-- `scripts/`: DES simulation, aggregation, revision audits, coefficient sensitivity, observable-descriptor audit, frequency-identifiability audit, non-stationary shift audit, and figure generation scripts.
+- `scripts/`: DES simulation, aggregation, learned tail-scale calibration, revision audits, coefficient sensitivity, observable-descriptor audit, frequency-identifiability audit, non-stationary shift audit, and figure generation scripts.
 - `scripts/ns3/`: NS-3 runner, scratch scenario, packet-trace postprocessing, held-out evaluation, and seed-pair audit scripts.
 - `outputs/des_20seed_summary/`: 20-seed DES aggregate CSV files and generated table snippets.
 - `outputs/revision_audits/`: statistical, sensitivity, observable-descriptor, frequency-identifiability, risk-weight, and non-stationary audit outputs.

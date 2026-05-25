@@ -2,7 +2,7 @@
 
 ## Data and Code Availability
 
-A review artifact has been prepared for this revision and is available at <https://github.com/ermalimust/comnet-review-artifact_26>. The artifact contains the DES simulation scripts, NS-3 scratch scenario and runner, calibration and aggregation scripts, 20-seed DES aggregate outputs, NS-3 10-seed held-out and seed-fold outputs, revision-audit CSV files, the frequency-identifiability audit, generated LaTeX table snippets, and figure-generation sources. Large raw per-window DES traces and raw NS-3 packet traces are omitted from the lightweight repository to keep the artifact compact, but they can be regenerated from the included scripts and seed lists or supplied as a separate archive upon request. A public archival version of the repository can be released after acceptance.
+A review artifact has been prepared for this revision and is available at <https://github.com/ermalimust/comnet-review-artifact_26>. The artifact contains the DES simulation scripts, learned tail-scale calibration protocol, NS-3 scratch scenario and runner, calibration and aggregation scripts, 20-seed DES aggregate outputs, NS-3 10-seed held-out and seed-fold outputs, revision-audit CSV files, the frequency-identifiability audit, generated LaTeX table snippets, and figure-generation sources. Large raw per-window DES traces and raw NS-3 packet traces are omitted from the lightweight repository to keep the artifact compact, but they can be regenerated from the included scripts and seed lists or supplied as a separate archive upon request. A public archival version of the repository can be released after acceptance.
 
 ## Response Letter Wording
 
