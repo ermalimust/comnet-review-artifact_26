@@ -8,6 +8,14 @@ Networks positioning: heterogeneous wireless traffic, rule-driven background
 transmissions, shared wireless contention, mobility/channel variation, and
 target-flow delay risk.
 
+The scratch program supports two topology modes:
+
+- `single_sta` (default): target and rule-driven background flows originate from
+  the UAV STA and share the AP medium.
+- `two_sta_contention`: the target flow originates from the UAV STA, while
+  Remote-ID, telemetry, and C2 background flows originate from a second STA that
+  contends for the same AP.
+
 ## Files
 
 - `uav_vehicular_vacation.cc`: NS-3 scratch program.
@@ -39,25 +47,25 @@ The runner supports both the newer `ns3` frontend and legacy `waf` frontend:
 From the repository root:
 
 ```powershell
-.\experiments\ns3\run_ns3_experiment.ps1 -Ns3Root ".\tools\ns3\ns-allinone-3.47\ns-3.47"
+.\scripts\ns3\run_ns3_experiment.ps1 -Ns3Root ".\tools\ns3\ns-allinone-3.47\ns-3.47"
 ```
 
 Useful options:
 
 ```powershell
-.\experiments\ns3\run_ns3_experiment.ps1 `
+.\scripts\ns3\run_ns3_experiment.ps1 `
   -Ns3Root ".\tools\ns3\ns-allinone-3.47\ns-3.47" `
   -Seeds @(7,11,13,17,19) `
   -Scenarios @("overall","load_high","vacation_high","drift_strong") `
   -Target video `
   -Duration 120 `
-  -OutDir "paper1_draft/experiment_outputs/ns3_validation"
+  -OutDir "outputs/ns3_validation"
 ```
 
 The runner writes packet traces under:
 
 ```text
-paper1_draft/experiment_outputs/ns3_validation/packets/
+outputs/ns3_validation/packets/
 ```
 
 Then it writes:
@@ -65,6 +73,20 @@ Then it writes:
 - `ns3_window_metrics.csv`
 - `ns3_summary.csv`
 - `ns3_validation_table.tex`
+
+Two-STA topology probe:
+
+```powershell
+.\scripts\ns3\run_ns3_experiment.ps1 `
+  -Ns3Root ".\tools\ns3\ns-allinone-3.47\ns-3.47" `
+  -Seeds @(7,11,13) `
+  -Scenarios @("overall","vacation_high","drift_strong") `
+  -Target video `
+  -Duration 120 `
+  -Topology two_sta_contention `
+  -OutDir "outputs/ns3_topology_probe"
+python .\scripts\ns3\evaluate_ns3_heldout.py --window ".\outputs\ns3_topology_probe\ns3_window_metrics.csv" --outdir ".\outputs\ns3_topology_probe" --train-seeds 7,11 --test-seeds 13
+```
 
 The default NS-3 deadline threshold is `0.01` s. The postprocessor reports
 received-packet delay statistics separately from a loss-inclusive deadline
@@ -100,7 +122,8 @@ The scratch program currently supports:
 - `traffic_mix_c2_heavy`
 
 Each scenario adjusts target load, rule-driven background occupation, mobility,
-and channel drift. The target flow can be `video` or `event_c2`.
+and channel drift. The target flow can be `video` or `event_c2`. The topology can
+be `single_sta` or `two_sta_contention`.
 
 ## Interpretation
 
@@ -111,6 +134,9 @@ It is best used to support claims such as:
 - high load and strong drift remain the hardest cases;
 - vacation-like service unavailability is observable in a packet-level wireless
   simulator.
+- moving background flows to a separate contending STA preserves the expected
+  high-vacation delay and strong-drift loss signatures in a second small
+  topology.
 
 It should not be described as a full hardware, field-trace, C-V2X, NR-V2X, or
 deployment validation unless additional trace-driven calibration is added.

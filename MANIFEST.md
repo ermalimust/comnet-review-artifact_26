@@ -11,9 +11,10 @@ This file summarizes the review artifact contents and how each group maps to the
 - `scripts/model_blind_descriptors.py`: observable-descriptor audit.
 - `scripts/identifiability_audit.py`: controlled frequency-identifiability audit for unavailable-interval descriptors.
 - `scripts/nonstationarity_shift_audit.py`: mid-trace non-stationary shift audit.
+- `scripts/closed_loop_control_audit.py`: sequential rolling-threshold control audit.
 - `scripts/make_figures.py`: PGFPlots/TikZ source generation for manuscript figures.
 - `scripts/ns3/run_ns3_experiment.ps1`: NS-3 batch runner.
-- `scripts/ns3/uav_vehicular_vacation.cc`: NS-3 scratch scenario.
+- `scripts/ns3/uav_vehicular_vacation.cc`: NS-3 scratch scenario with single-STA and two-STA contention topology options.
 - `scripts/ns3/postprocess_ns3.py`: packet-trace to window-metric postprocessing.
 - `scripts/ns3/evaluate_ns3_heldout.py`: representative held-out NS-3 evaluation.
 - `scripts/ns3/evaluate_ns3_seedfold.py`: five-fold seed-pair NS-3 audit.
@@ -28,10 +29,15 @@ This file summarizes the review artifact contents and how each group maps to the
 - `outputs/revision_audits/model_blind_descriptor_*.csv`: observable-descriptor audit outputs.
 - `outputs/revision_audits/identifiability_*.csv`: controlled frequency-identifiability audit outputs.
 - `outputs/revision_audits/nonstationarity_shift_*.csv`: non-stationary shift audit outputs.
+- `outputs/revision_audits/closed_loop_control_summary.csv`: sequential rolling-threshold control audit summary.
+- `outputs/revision_audits/closed_loop_control_metrics_by_seed.csv`: per-seed rolling-control audit metrics.
 - `outputs/ns3_10seed_summary/ns3_summary.csv`: 10-seed NS-3 packet-level summary.
 - `outputs/ns3_10seed_summary/ns3_shadow_prediction_metrics.csv`: representative held-out NS-3 metrics.
 - `outputs/ns3_10seed_summary/ns3_seedfold_metrics_summary.csv`: five-fold seed-pair NS-3 metrics.
 - `outputs/ns3_10seed_summary/ns3_window_metrics.csv`: window-level NS-3 metrics derived from packet traces.
+- `outputs/ns3_topology_probe/ns3_summary.csv`: two-STA topology-probe packet-level summary.
+- `outputs/ns3_topology_probe/ns3_shadow_prediction_metrics.csv`: held-out screening metrics for the two-STA topology probe.
+- `outputs/ns3_topology_probe/ns3_window_metrics.csv`: two-STA topology-probe window metrics derived from packet traces.
 
 ## Tables and Figures
 
@@ -45,6 +51,7 @@ The following files are intentionally omitted from this lightweight GitHub-ready
 
 - Per-seed DES `window_predictions.csv` files.
 - Raw NS-3 packet CSV traces.
+- Large derived `closed_loop_control_traces.csv` trace.
 - LaTeX build intermediates and generated PDFs.
 
 These files can be regenerated using the scripts and seed lists documented in `README.md`.

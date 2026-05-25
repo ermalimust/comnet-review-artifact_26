@@ -6,11 +6,12 @@ The artifact is intended for peer review. It avoids manuscript metadata, reviewe
 
 ## Contents
 
-- `scripts/`: DES simulation, aggregation, learned tail-scale calibration, revision audits, coefficient sensitivity, observable-descriptor audit, frequency-identifiability audit, non-stationary shift audit, and figure generation scripts.
-- `scripts/ns3/`: NS-3 runner, scratch scenario, packet-trace postprocessing, held-out evaluation, and seed-pair audit scripts.
+- `scripts/`: DES simulation, aggregation, learned tail-scale calibration, revision audits, coefficient sensitivity, observable-descriptor audit, frequency-identifiability audit, non-stationary shift audit, sequential rolling-threshold control audit, and figure generation scripts.
+- `scripts/ns3/`: NS-3 runner, scratch scenario with single-STA and two-STA contention topologies, packet-trace postprocessing, held-out evaluation, and seed-pair audit scripts.
 - `outputs/des_20seed_summary/`: 20-seed DES aggregate CSV files and generated table snippets.
-- `outputs/revision_audits/`: statistical, sensitivity, observable-descriptor, frequency-identifiability, risk-weight, and non-stationary audit outputs.
+- `outputs/revision_audits/`: statistical, sensitivity, observable-descriptor, frequency-identifiability, risk-weight, non-stationary, and rolling closed-loop audit outputs.
 - `outputs/ns3_10seed_summary/`: 10-seed NS-3 window-level summaries, held-out metrics, and seed-fold metrics.
+- `outputs/ns3_topology_probe/`: two-STA NS-3 topology-probe summaries and held-out screening metrics.
 - `tables/`: LaTeX table snippets used in the revised manuscript.
 - `figures/`: PGFPlots/TikZ figure sources used to generate the revised manuscript figures.
 
@@ -37,6 +38,12 @@ NS-3 packet-trace seeds:
 7, 11, 13, 17, 19, 23, 29, 31, 37, 41
 ```
 
+NS-3 two-STA topology-probe seeds:
+
+```text
+7, 11, 13
+```
+
 ## Reproducing the DES Summaries
 
 From the repository root, run the following commands. The full 20-seed DES run can take time because it generates per-window predictions for every seed.
@@ -60,6 +67,7 @@ python scripts\coefficient_sensitivity.py --seeds $seedText --outdir outputs/rev
 python scripts\model_blind_descriptors.py --seeds $seedText --outdir outputs/revision_audits --table-dir tables/des
 python scripts\identifiability_audit.py --seeds $seedText --outdir outputs/revision_audits --table-dir tables/des
 python scripts\nonstationarity_shift_audit.py --seeds $seedText --outdir outputs/revision_audits --table-dir tables/des
+python scripts\closed_loop_control_audit.py --input-root outputs --run-glob "des_seed*_margin22" --outdir outputs/revision_audits
 ```
 
 ## Reproducing the NS-3 Summaries
@@ -77,9 +85,18 @@ python scripts\ns3\evaluate_ns3_heldout.py --window outputs/ns3_validation_exten
 python scripts\ns3\evaluate_ns3_seedfold.py --window outputs/ns3_validation_extended/ns3_window_metrics.csv --outdir outputs/ns3_validation_extended --table-dir tables/ns3
 ```
 
+Two-STA topology probe:
+
+```powershell
+$probeSeeds = @(7,11,13)
+$probeScenarios = @("overall","vacation_high","drift_strong")
+powershell -ExecutionPolicy Bypass -File scripts\ns3\run_ns3_experiment.ps1 -Ns3Root $env:NS3_ROOT -Seeds $probeSeeds -Scenarios $probeScenarios -Target video -Duration 120 -Topology two_sta_contention -OutDir outputs\ns3_topology_probe
+python scripts\ns3\evaluate_ns3_heldout.py --window outputs/ns3_topology_probe/ns3_window_metrics.csv --outdir outputs/ns3_topology_probe --train-seeds 7,11 --test-seeds 13
+```
+
 ## Raw Trace Policy
 
-The lightweight artifact includes aggregate CSVs, audit CSVs, generated table snippets, and NS-3 window-level outputs. Large raw DES per-window traces and raw NS-3 packet traces are omitted from the GitHub-ready folder to keep the review artifact compact. They can be regenerated using the scripts and commands above, or provided as a separate archive/release if requested by the editor or reviewers.
+The lightweight artifact includes aggregate CSVs, audit CSVs, generated table snippets, and NS-3 window-level outputs. Large raw DES per-window traces, raw NS-3 packet traces, and the large per-window rolling-control trace are omitted from the GitHub-ready folder to keep the review artifact compact. They can be regenerated using the scripts and commands above, or provided as a separate archive/release if requested by the editor or reviewers.
 
 ## Suggested Citation in the Manuscript
 

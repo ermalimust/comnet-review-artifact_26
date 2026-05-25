@@ -17,7 +17,10 @@ param(
 
     [double]$ViolationTau = 0.01,
 
-    [string]$OutDir = "paper1_draft/experiment_outputs/ns3_validation"
+    [ValidateSet("single_sta", "two_sta_contention")]
+    [string]$Topology = "single_sta",
+
+    [string]$OutDir = "outputs/ns3_validation"
 )
 
 $ErrorActionPreference = "Stop"
@@ -88,7 +91,7 @@ function Invoke-Ns3Program {
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $ns3RootResolved = (Resolve-Path $Ns3Root).Path
-$scratchSource = Join-Path $repoRoot "experiments\ns3\uav_vehicular_vacation.cc"
+$scratchSource = Join-Path $repoRoot "scripts\ns3\uav_vehicular_vacation.cc"
 $scratchDir = Join-Path $ns3RootResolved "scratch"
 $scratchTarget = Join-Path $scratchDir "uav_vehicular_vacation.cc"
 $outDirResolved = Join-Path $repoRoot $OutDir
@@ -106,15 +109,15 @@ Copy-Item -LiteralPath $scratchSource -Destination $scratchTarget -Force
 
 foreach ($scenario in $Scenarios) {
     foreach ($seed in $Seeds) {
-        $packetPath = Join-Path $packetDir ("{0}_seed{1}_packets.csv" -f $scenario, $seed)
+        $packetPath = Join-Path $packetDir ("{0}_{1}_seed{2}_packets.csv" -f $scenario, $Topology, $seed)
         $packetPathArg = $packetPath -replace "\\", "/"
-        $programArgs = "uav_vehicular_vacation --scenario=$scenario --target=$Target --seed=$seed --duration=$Duration --warmup=$Warmup --out=$packetPathArg"
+        $programArgs = "uav_vehicular_vacation --scenario=$scenario --target=$Target --seed=$seed --duration=$Duration --warmup=$Warmup --topology=$Topology --out=$packetPathArg"
         Write-Host "Running ns-3: $programArgs"
         Invoke-Ns3Program -ProgramArgs $programArgs -Ns3RootResolved $ns3RootResolved -RepoRoot $repoRoot
     }
 }
 
-$postprocess = Join-Path $repoRoot "experiments\ns3\postprocess_ns3.py"
+$postprocess = Join-Path $repoRoot "scripts\ns3\postprocess_ns3.py"
 $packetGlob = Join-Path $packetDir "*_packets.csv"
 python $postprocess --input $packetGlob --outdir $outDirResolved --window $Window --warmup $Warmup --violation-tau $ViolationTau
 

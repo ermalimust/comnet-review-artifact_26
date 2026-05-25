@@ -6,10 +6,13 @@
  *   to a roadside/AP node over an 802.11 link. Remote ID, telemetry, and C2
  *   heartbeat are modeled as periodic background flows that occupy the shared
  *   wireless medium. Video or event-triggered C2 is modeled as the target flow.
+ *   The optional two_sta_contention topology moves the rule-driven background
+ *   flows to a second STA so that the target flow is tested under multi-station
+ *   contention rather than co-located source traffic.
  *
  * Output:
  *   A packet-level CSV with transmit and receive timestamps. Postprocess it
- *   with experiments/ns3/postprocess_ns3.py to obtain window-level delay-risk
+ *   with scripts/ns3/postprocess_ns3.py to obtain window-level delay-risk
  *   metrics for the paper.
  *
  * Intended use:
@@ -362,6 +365,7 @@ main(int argc, char* argv[])
     double duration = 120.0;
     double warmup = 5.0;
     bool enablePcap = false;
+    std::string topology = "single_sta";
 
     CommandLine cmd;
     cmd.AddValue("scenario", "Scenario name: overall, load_high, vacation_high, drift_strong", scenario);
@@ -371,7 +375,15 @@ main(int argc, char* argv[])
     cmd.AddValue("duration", "Simulation duration in seconds", duration);
     cmd.AddValue("warmup", "Warm-up interval before traffic starts", warmup);
     cmd.AddValue("enablePcap", "Enable Wi-Fi pcap traces", enablePcap);
+    cmd.AddValue("topology", "Topology: single_sta or two_sta_contention", topology);
     cmd.Parse(argc, argv);
+
+    bool twoStaContention = (topology == "two_sta_contention");
+    if (topology != "single_sta" && !twoStaContention)
+    {
+        NS_FATAL_ERROR("Unknown topology: " << topology);
+    }
+    std::string outputScenario = twoStaContention ? (scenario + "_two_sta") : scenario;
 
     RngSeedManager::SetSeed(seed);
     RngSeedManager::SetRun(seed);
@@ -387,9 +399,10 @@ main(int argc, char* argv[])
     WriteHeader(g_state);
 
     NodeContainer nodes;
-    nodes.Create(2);
+    nodes.Create(twoStaContention ? 3 : 2);
     Ptr<Node> uavNode = nodes.Get(0);
     Ptr<Node> apNode = nodes.Get(1);
+    Ptr<Node> backgroundNode = twoStaContention ? nodes.Get(2) : uavNode;
 
     YansWifiChannelHelper channel = YansWifiChannelHelper::Default();
     YansWifiPhyHelper phy;
@@ -407,8 +420,14 @@ main(int argc, char* argv[])
 
     WifiMacHelper mac;
     Ssid ssid = Ssid("uav-vehicular-vacation");
+    NodeContainer staNodes;
+    staNodes.Add(uavNode);
+    if (twoStaContention)
+    {
+        staNodes.Add(backgroundNode);
+    }
     mac.SetType("ns3::StaWifiMac", "Ssid", SsidValue(ssid), "ActiveProbing", BooleanValue(false));
-    NetDeviceContainer staDevice = wifi.Install(phy, mac, uavNode);
+    NetDeviceContainer staDevice = wifi.Install(phy, mac, staNodes);
     mac.SetType("ns3::ApWifiMac", "Ssid", SsidValue(ssid));
     NetDeviceContainer apDevice = wifi.Install(phy, mac, apNode);
 
@@ -416,6 +435,10 @@ main(int argc, char* argv[])
     Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator>();
     positionAlloc->Add(Vector(cfg.startDistance, 0.0, 40.0));
     positionAlloc->Add(Vector(0.0, 0.0, 5.0));
+    if (twoStaContention)
+    {
+        positionAlloc->Add(Vector(8.0, 18.0, 2.0));
+    }
     mobility.SetPositionAllocator(positionAlloc);
     mobility.SetMobilityModel("ns3::ConstantVelocityMobilityModel");
     mobility.Install(nodes);
@@ -426,6 +449,12 @@ main(int argc, char* argv[])
     Ptr<ConstantVelocityMobilityModel> apMobility =
         apNode->GetObject<ConstantVelocityMobilityModel>();
     apMobility->SetVelocity(Vector(0.0, 0.0, 0.0));
+    if (twoStaContention)
+    {
+        Ptr<ConstantVelocityMobilityModel> backgroundMobility =
+            backgroundNode->GetObject<ConstantVelocityMobilityModel>();
+        backgroundMobility->SetVelocity(Vector(0.0, 0.0, 0.0));
+    }
 
     InternetStackHelper stack;
     stack.Install(nodes);
@@ -452,7 +481,7 @@ main(int argc, char* argv[])
     InstallFlow(uavNode,
                 peerAddress,
                 1,
-                scenario,
+                outputScenario,
                 target,
                 true,
                 targetBytes,
@@ -470,10 +499,10 @@ main(int argc, char* argv[])
     uint32_t heartbeatBurst =
         static_cast<uint32_t>(std::max(1.0, std::round(2.0 * cfg.vacationScale)));
 
-    InstallFlow(uavNode,
+    InstallFlow(backgroundNode,
                 peerAddress,
                 10,
-                scenario,
+                outputScenario,
                 "remote_id",
                 false,
                 static_cast<uint32_t>(360 * cfg.vacationScale),
@@ -484,10 +513,10 @@ main(int argc, char* argv[])
                 ridBurst,
                 0.002,
                 seed);
-    InstallFlow(uavNode,
+    InstallFlow(backgroundNode,
                 peerAddress,
                 11,
-                scenario,
+                outputScenario,
                 "telemetry",
                 false,
                 static_cast<uint32_t>(300 * cfg.vacationScale),
@@ -498,10 +527,10 @@ main(int argc, char* argv[])
                 telemetryBurst,
                 0.002,
                 seed);
-    InstallFlow(uavNode,
+    InstallFlow(backgroundNode,
                 peerAddress,
                 12,
-                scenario,
+                outputScenario,
                 "c2_heartbeat",
                 false,
                 static_cast<uint32_t>(180 * cfg.vacationScale),
