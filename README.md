@@ -82,5 +82,4 @@ The lightweight artifact includes aggregate CSVs, audit CSVs, generated table sn
 
 ## Suggested Citation in the Manuscript
 
-Use the statement in `REVIEW_ARTIFACT_STATEMENT.md` after creating the anonymous GitHub repository.
-
+Use the statement in `REVIEW_ARTIFACT_STATEMENT.md` for manuscript and response-letter wording.
