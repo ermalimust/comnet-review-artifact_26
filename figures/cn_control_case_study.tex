@@ -1,0 +1,182 @@
+\documentclass[tikz,border=4pt]{standalone}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
+\definecolor{proposedblue}{RGB}{46,94,170}
+\definecolor{staticgray}{RGB}{128,136,148}
+\definecolor{oraclegreen}{RGB}{69,145,98}
+\definecolor{blackboxorange}{RGB}{218,132,55}
+\definecolor{nomarginred}{RGB}{186,78,68}
+\definecolor{vacationgold}{RGB}{204,151,55}
+\definecolor{monepurple}{RGB}{126,93,159}
+\definecolor{tealgreen}{RGB}{35,143,135}
+\definecolor{deepviolet}{RGB}{98,80,154}
+\begin{document}
+
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=2 by 2, horizontal sep=1.15cm, vertical sep=1.80cm},
+    width=3.55in,
+    height=2.45in,
+    ymajorgrids=true,
+    xmajorgrids=false,
+    grid style={black!12},
+    axis x line*=bottom,
+    axis y line*=left,
+    axis line style={black!65, line width=0.45pt},
+    tick style={black!65, line width=0.45pt},
+    label style={font=\scriptsize},
+    tick label style={font=\scriptsize},
+    title style={font=\small, yshift=-0.5ex},
+]
+\nextgroupplot[
+    title={(a) Violation reduction},
+    ybar,
+    ymin=0,
+    ymax=0.176,
+    ylabel={Reduction},
+    symbolic x coords={proposed_safe_trigger,direct_risk_trigger,static_utilization_trigger,ewma_persistence_trigger,random_trigger},
+    xtick={proposed_safe_trigger,direct_risk_trigger,static_utilization_trigger,ewma_persistence_trigger,random_trigger},
+    xticklabels={{Calibrated risk},{Direct risk},{Utilization},{EWMA},{Random}},
+    x tick label style={font=\scriptsize, rotate=22, anchor=east},
+    enlarge x limits=0.16,
+    legend style={at={(0.5,1.28)}, anchor=south, legend columns=5, draw=none, fill=none, font=\scriptsize},
+]
+\addplot+[ybar, bar width=8pt, fill=tealgreen, draw=black!45, line width=0.2pt] coordinates {
+(proposed_safe_trigger,0.1492)
+};
+\addlegendentry{Calibrated risk}
+
+\addplot+[ybar, bar width=8pt, fill=nomarginred, draw=black!45, line width=0.2pt] coordinates {
+(direct_risk_trigger,0.1379)
+};
+\addlegendentry{Direct risk}
+
+\addplot+[ybar, bar width=8pt, fill=oraclegreen, draw=black!45, line width=0.2pt] coordinates {
+(static_utilization_trigger,0.1267)
+};
+\addlegendentry{Utilization}
+
+\addplot+[ybar, bar width=8pt, fill=monepurple, draw=black!45, line width=0.2pt] coordinates {
+(ewma_persistence_trigger,0.0528)
+};
+\addlegendentry{EWMA}
+
+\addplot+[ybar, bar width=8pt, fill=staticgray, draw=black!45, line width=0.2pt] coordinates {
+(random_trigger,0.0540)
+};
+\addlegendentry{Random}
+
+
+\nextgroupplot[
+    title={(b) Tail-delay reduction},
+    ybar,
+    ymin=0,
+    ymax=0.101,
+    ylabel={$p95$ reduction},
+    symbolic x coords={proposed_safe_trigger,direct_risk_trigger,static_utilization_trigger,ewma_persistence_trigger,random_trigger},
+    xtick={proposed_safe_trigger,direct_risk_trigger,static_utilization_trigger,ewma_persistence_trigger,random_trigger},
+    xticklabels={{Calibrated risk},{Direct risk},{Utilization},{EWMA},{Random}},
+    x tick label style={font=\scriptsize, rotate=22, anchor=east},
+    enlarge x limits=0.16,
+]
+\addplot+[ybar, bar width=8pt, fill=tealgreen, draw=black!45, line width=0.2pt] coordinates {
+(proposed_safe_trigger,0.0859)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=nomarginred, draw=black!45, line width=0.2pt] coordinates {
+(direct_risk_trigger,0.0755)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=oraclegreen, draw=black!45, line width=0.2pt] coordinates {
+(static_utilization_trigger,0.0805)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=monepurple, draw=black!45, line width=0.2pt] coordinates {
+(ewma_persistence_trigger,0.0309)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=staticgray, draw=black!45, line width=0.2pt] coordinates {
+(random_trigger,0.0331)
+};
+
+
+
+\nextgroupplot[
+    title={(c) False-alarm cost},
+    ybar,
+    ymin=0,
+    ymax=0.213,
+    ylabel={False alarms},
+    symbolic x coords={proposed_safe_trigger,direct_risk_trigger,static_utilization_trigger,ewma_persistence_trigger,random_trigger},
+    xtick={proposed_safe_trigger,direct_risk_trigger,static_utilization_trigger,ewma_persistence_trigger,random_trigger},
+    xticklabels={{Calibrated risk},{Direct risk},{Utilization},{EWMA},{Random}},
+    x tick label style={font=\scriptsize, rotate=22, anchor=east},
+    enlarge x limits=0.16,
+]
+\addplot+[ybar, bar width=8pt, fill=tealgreen, draw=black!45, line width=0.2pt] coordinates {
+(proposed_safe_trigger,0.1332)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=nomarginred, draw=black!45, line width=0.2pt] coordinates {
+(direct_risk_trigger,0.1346)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=oraclegreen, draw=black!45, line width=0.2pt] coordinates {
+(static_utilization_trigger,0.1498)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=monepurple, draw=black!45, line width=0.2pt] coordinates {
+(ewma_persistence_trigger,0.1805)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=staticgray, draw=black!45, line width=0.2pt] coordinates {
+(random_trigger,0.1800)
+};
+
+
+
+\nextgroupplot[
+    title={(d) Same-cost ranking},
+    xlabel={Background cost},
+    ylabel={Violation reduction},
+    xmin=0, xmax=0.0283,
+    ymin=0, ymax=0.1761,
+    legend style={at={(0.02,0.98)}, anchor=north west, legend columns=1, draw=none, fill=none, font=\scriptsize},
+]
+\addplot+[only marks, mark=*, mark size=2.1pt, tealgreen] coordinates {
+(0.0240,0.1492)
+};
+\addlegendentry{Calibrated risk}
+
+\addplot+[only marks, mark=square*, mark size=2.1pt, nomarginred] coordinates {
+(0.0240,0.1379)
+};
+\addlegendentry{Direct risk}
+
+\addplot+[only marks, mark=triangle*, mark size=2.1pt, oraclegreen] coordinates {
+(0.0240,0.1267)
+};
+\addlegendentry{Utilization}
+
+\addplot+[only marks, mark=diamond*, mark size=2.1pt, monepurple] coordinates {
+(0.0240,0.0528)
+};
+\addlegendentry{EWMA}
+
+\addplot+[only marks, mark=otimes*, mark size=2.1pt, staticgray] coordinates {
+(0.0240,0.0540)
+};
+\addlegendentry{Random}
+
+\end{groupplot}
+\end{tikzpicture}
+\end{document}

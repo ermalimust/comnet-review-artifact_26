@@ -1,0 +1,533 @@
+\documentclass[tikz,border=4pt]{standalone}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
+\definecolor{proposedblue}{RGB}{46,94,170}
+\definecolor{staticgray}{RGB}{128,136,148}
+\definecolor{oraclegreen}{RGB}{69,145,98}
+\definecolor{blackboxorange}{RGB}{218,132,55}
+\definecolor{nomarginred}{RGB}{186,78,68}
+\definecolor{vacationgold}{RGB}{204,151,55}
+\definecolor{monepurple}{RGB}{126,93,159}
+\definecolor{tealgreen}{RGB}{35,143,135}
+\definecolor{deepviolet}{RGB}{98,80,154}
+\begin{document}
+
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=2 by 2, horizontal sep=1.10cm, vertical sep=1.75cm},
+    width=3.55in,
+    height=2.45in,
+    ymajorgrids=true,
+    grid style={black!12},
+    axis x line*=bottom,
+    axis y line*=left,
+    axis line style={black!65, line width=0.45pt},
+    tick style={black!65, line width=0.45pt},
+    label style={font=\scriptsize},
+    tick label style={font=\scriptsize},
+    title style={font=\small, yshift=-0.5ex},
+]
+\nextgroupplot[
+    title={(a) High-risk ranking},
+    ybar,
+    ymin=0.000,
+    ymax=1.020,
+    ylabel={AUROC},
+    legend style={at={(0.5,1.30)}, anchor=south, legend columns=4, draw=none, fill=none, font=\scriptsize, /tikz/every even column/.append style={column sep=0.11cm}},
+    symbolic x coords={overall,drift_strong,load_high,vacation_high},
+    xtick=data,
+    xticklabels={{Overall},{Strong\\drift},{High\\load},{High\\vacation}},
+    x tick label style={font=\scriptsize, align=center, text depth=0.25ex},
+    enlarge x limits=0.14,
+]
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=tealgreen,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.8679)
+(drift_strong,0.8283)
+(load_high,0.7947)
+(vacation_high,0.8560)
+};
+\addlegendentry{Adaptive margin}
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=proposedblue,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.8685)
+(drift_strong,0.8279)
+(load_high,0.7943)
+(vacation_high,0.8547)
+};
+\addlegendentry{Global margin}
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=deepviolet,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.8725)
+(drift_strong,0.7703)
+(load_high,0.8152)
+(vacation_high,0.8542)
+};
+\addlegendentry{Adaptive direct}
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=nomarginred,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.8725)
+(drift_strong,0.7706)
+(load_high,0.8148)
+(vacation_high,0.8532)
+};
+\addlegendentry{Direct conformal}
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=vacationgold,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.8712)
+(drift_strong,0.7734)
+(load_high,0.8119)
+(vacation_high,0.8531)
+};
+\addlegendentry{Direct $p95$}
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=monepurple,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4758)
+(drift_strong,0.4833)
+(load_high,0.4674)
+(vacation_high,0.4935)
+};
+\addlegendentry{EWMA}
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=monepurple,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.8642)
+(drift_strong,0.8255)
+(load_high,0.7789)
+(vacation_high,0.8510)
+};
+\addlegendentry{Kingman}
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=vacationgold,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.8715)
+(drift_strong,0.7734)
+(load_high,0.8118)
+(vacation_high,0.8527)
+};
+\addlegendentry{Tail regression}
+
+
+\nextgroupplot[
+    title={(b) Top-10\% precision},
+    ybar,
+    ymin=0.000,
+    ymax=1.020,
+    ylabel={Precision},
+    symbolic x coords={overall,drift_strong,load_high,vacation_high},
+    xtick=data,
+    xticklabels={{Overall},{Strong\\drift},{High\\load},{High\\vacation}},
+    x tick label style={font=\scriptsize, align=center, text depth=0.25ex},
+    enlarge x limits=0.14,
+]
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=tealgreen,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4440)
+(drift_strong,0.4420)
+(load_high,0.2400)
+(vacation_high,0.4120)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=proposedblue,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4340)
+(drift_strong,0.4420)
+(load_high,0.2400)
+(vacation_high,0.4160)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=deepviolet,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4440)
+(drift_strong,0.2480)
+(load_high,0.3580)
+(vacation_high,0.4180)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=nomarginred,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4440)
+(drift_strong,0.2480)
+(load_high,0.3500)
+(vacation_high,0.4160)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=vacationgold,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4380)
+(drift_strong,0.2460)
+(load_high,0.3520)
+(vacation_high,0.4220)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=monepurple,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.0780)
+(drift_strong,0.0740)
+(load_high,0.0880)
+(vacation_high,0.0820)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=monepurple,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4380)
+(drift_strong,0.4320)
+(load_high,0.2100)
+(vacation_high,0.4160)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=vacationgold,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4380)
+(drift_strong,0.2460)
+(load_high,0.3460)
+(vacation_high,0.4180)
+};
+
+
+
+\nextgroupplot[
+    title={(c) Top-10\% recall},
+    ybar,
+    ymin=0.000,
+    ymax=1.020,
+    ylabel={Recall},
+    symbolic x coords={overall,drift_strong,load_high,vacation_high},
+    xtick=data,
+    xticklabels={{Overall},{Strong\\drift},{High\\load},{High\\vacation}},
+    x tick label style={font=\scriptsize, align=center, text depth=0.25ex},
+    enlarge x limits=0.14,
+]
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=tealgreen,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4440)
+(drift_strong,0.4420)
+(load_high,0.2400)
+(vacation_high,0.4120)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=proposedblue,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4340)
+(drift_strong,0.4420)
+(load_high,0.2400)
+(vacation_high,0.4160)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=deepviolet,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4440)
+(drift_strong,0.2480)
+(load_high,0.3580)
+(vacation_high,0.4180)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=nomarginred,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4440)
+(drift_strong,0.2480)
+(load_high,0.3500)
+(vacation_high,0.4160)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=vacationgold,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4380)
+(drift_strong,0.2460)
+(load_high,0.3520)
+(vacation_high,0.4220)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=monepurple,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.0780)
+(drift_strong,0.0740)
+(load_high,0.0880)
+(vacation_high,0.0820)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=monepurple,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4380)
+(drift_strong,0.4320)
+(load_high,0.2100)
+(vacation_high,0.4160)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=vacationgold,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4380)
+(drift_strong,0.2460)
+(load_high,0.3460)
+(vacation_high,0.4180)
+};
+
+
+
+\nextgroupplot[
+    title={(d) Calibration error},
+    ybar,
+    ymin=0.000,
+    ymax=4.208,
+    ylabel={Mean bin error},
+    symbolic x coords={overall,drift_strong,load_high,vacation_high},
+    xtick=data,
+    xticklabels={{Overall},{Strong\\drift},{High\\load},{High\\vacation}},
+    x tick label style={font=\scriptsize, align=center, text depth=0.25ex},
+    enlarge x limits=0.14,
+]
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=tealgreen,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.2915)
+(drift_strong,0.6350)
+(load_high,0.2413)
+(vacation_high,0.3978)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=proposedblue,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.2873)
+(drift_strong,0.7289)
+(load_high,0.2281)
+(vacation_high,0.1931)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=deepviolet,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.1978)
+(drift_strong,3.5416)
+(load_high,0.2662)
+(vacation_high,0.2216)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=nomarginred,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.1952)
+(drift_strong,3.6592)
+(load_high,0.3027)
+(vacation_high,0.1071)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=vacationgold,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.0667)
+(drift_strong,1.3173)
+(load_high,0.3664)
+(vacation_high,0.0746)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=monepurple,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.3798)
+(drift_strong,1.3048)
+(load_high,0.5811)
+(vacation_high,0.6108)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=monepurple,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.3824)
+(drift_strong,0.9266)
+(load_high,0.2458)
+(vacation_high,0.2482)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=vacationgold,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.2338)
+(drift_strong,1.0385)
+(load_high,0.2984)
+(vacation_high,0.1458)
+};
+
+
+\end{groupplot}
+\end{tikzpicture}
+\end{document}

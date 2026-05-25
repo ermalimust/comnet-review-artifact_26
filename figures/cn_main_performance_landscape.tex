@@ -1,0 +1,310 @@
+\documentclass[tikz,border=4pt]{standalone}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
+\definecolor{proposedblue}{RGB}{46,94,170}
+\definecolor{staticgray}{RGB}{128,136,148}
+\definecolor{oraclegreen}{RGB}{69,145,98}
+\definecolor{blackboxorange}{RGB}{218,132,55}
+\definecolor{nomarginred}{RGB}{186,78,68}
+\definecolor{vacationgold}{RGB}{204,151,55}
+\definecolor{monepurple}{RGB}{126,93,159}
+\definecolor{tealgreen}{RGB}{35,143,135}
+\definecolor{deepviolet}{RGB}{98,80,154}
+\begin{document}
+
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=2 by 2, horizontal sep=1.10cm, vertical sep=1.75cm},
+    width=3.55in,
+    height=2.45in,
+    ymajorgrids=true,
+    grid style={black!12},
+    axis x line*=bottom,
+    axis y line*=left,
+    axis line style={black!65, line width=0.45pt},
+    tick style={black!65, line width=0.45pt},
+    label style={font=\scriptsize},
+    tick label style={font=\scriptsize},
+    title style={font=\small, yshift=-0.5ex},
+]
+\nextgroupplot[
+    title={(a) Delay error},
+    ybar,
+    ymin=0.000,
+    ymax=1.241,
+    ylabel={MAE / static},
+    legend style={at={(0.5,1.30)}, anchor=south, legend columns=4, draw=none, fill=none, font=\scriptsize, /tikz/every even column/.append style={column sep=0.11cm}},
+    symbolic x coords={overall,drift_strong,load_high,vacation_high},
+    xtick=data,
+    xticklabels={{Overall},{Strong\\drift},{High\\load},{High\\vacation}},
+    x tick label style={font=\scriptsize, align=center, text depth=0.25ex},
+    enlarge x limits=0.14,
+]
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=tealgreen,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4401)
+(drift_strong,0.8459)
+(load_high,0.8722)
+(vacation_high,0.7788)
+};
+\addlegendentry{Adaptive margin}
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=proposedblue,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4401)
+(drift_strong,0.8459)
+(load_high,0.8722)
+(vacation_high,0.7788)
+};
+\addlegendentry{Global margin}
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=staticgray,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,1.0000)
+(drift_strong,1.0000)
+(load_high,1.0000)
+(vacation_high,1.0000)
+};
+\addlegendentry{Static}
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=blackboxorange,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.4351)
+(drift_strong,1.1076)
+(load_high,0.9520)
+(vacation_high,0.7639)
+};
+\addlegendentry{Black-box}
+
+
+\nextgroupplot[
+    title={(b) Risk error},
+    ybar,
+    ymin=0.000,
+    ymax=2.705,
+    ylabel={MAE / static},
+    symbolic x coords={overall,drift_strong,load_high,vacation_high},
+    xtick=data,
+    xticklabels={{Overall},{Strong\\drift},{High\\load},{High\\vacation}},
+    x tick label style={font=\scriptsize, align=center, text depth=0.25ex},
+    enlarge x limits=0.14,
+]
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=tealgreen,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.6663)
+(drift_strong,0.7812)
+(load_high,0.9179)
+(vacation_high,0.8532)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=proposedblue,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.6663)
+(drift_strong,0.7812)
+(load_high,0.9179)
+(vacation_high,0.8532)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=staticgray,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,1.0000)
+(drift_strong,1.0000)
+(load_high,1.0000)
+(vacation_high,1.0000)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=blackboxorange,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.6164)
+(drift_strong,2.4156)
+(load_high,0.8934)
+(vacation_high,0.7284)
+};
+
+
+
+\nextgroupplot[
+    title={(c) Coverage},
+    ybar,
+    ymin=0.000,
+    ymax=1.080,
+    ylabel={Coverage},
+    symbolic x coords={overall,drift_strong,load_high,vacation_high},
+    xtick=data,
+    xticklabels={{Overall},{Strong\\drift},{High\\load},{High\\vacation}},
+    x tick label style={font=\scriptsize, align=center, text depth=0.25ex},
+    enlarge x limits=0.14,
+]
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=tealgreen,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.9688)
+(drift_strong,0.6986)
+(load_high,0.6854)
+(vacation_high,0.9388)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=proposedblue,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.9684)
+(drift_strong,0.6278)
+(load_high,0.5870)
+(vacation_high,0.8640)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=staticgray,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.5952)
+(drift_strong,0.2072)
+(load_high,0.1248)
+(vacation_high,0.2666)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=blackboxorange,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.5618)
+(drift_strong,0.2246)
+(load_high,0.0882)
+(vacation_high,0.2104)
+};
+
+
+\addplot+[black!55, densely dashed, line width=0.6pt, mark=none, forget plot] coordinates {(overall,0.9000) (vacation_high,0.9000)};
+
+\nextgroupplot[
+    title={(d) Tail-delay error},
+    ybar,
+    ymin=0.000,
+    ymax=1.449,
+    ylabel={$p95$ MAE / static},
+    symbolic x coords={overall,drift_strong,load_high,vacation_high},
+    xtick=data,
+    xticklabels={{Overall},{Strong\\drift},{High\\load},{High\\vacation}},
+    x tick label style={font=\scriptsize, align=center, text depth=0.25ex},
+    enlarge x limits=0.14,
+]
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=tealgreen,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.7982)
+(drift_strong,0.8404)
+(load_high,0.9190)
+(vacation_high,0.9248)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=proposedblue,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.7982)
+(drift_strong,0.8404)
+(load_high,0.9190)
+(vacation_high,0.9248)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=staticgray,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,1.0000)
+(drift_strong,1.0000)
+(load_high,1.0000)
+(vacation_high,1.0000)
+};
+
+
+\addplot+[
+    ybar,
+    bar width=3.9pt,
+    fill=blackboxorange,
+    draw=black!45,
+    line width=0.2pt
+] coordinates {
+(overall,0.6019)
+(drift_strong,1.2941)
+(load_high,0.7769)
+(vacation_high,0.6566)
+};
+
+
+\end{groupplot}
+\end{tikzpicture}
+\end{document}

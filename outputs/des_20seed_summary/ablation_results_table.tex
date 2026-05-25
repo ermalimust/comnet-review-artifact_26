@@ -1,0 +1,25 @@
+\begin{tabular}{llccc}
+\hline
+Scenario & Variant & Delay MAE (s) & Risk MAE (s) & Coverage \\
+\hline
+\texttt{overall} & Global margin & 0.0167 $\pm$ 0.0014 & 0.0610 $\pm$ 0.0078 & 0.968 $\pm$ 0.018 \\
+\texttt{overall} & No safety margin & 0.0167 $\pm$ 0.0014 & 0.0610 $\pm$ 0.0078 & 0.295 $\pm$ 0.031 \\
+\texttt{overall} & No interruption modeling & 0.0167 $\pm$ 0.0014 & 0.0637 $\pm$ 0.0079 & 0.968 $\pm$ 0.018 \\
+\texttt{overall} & Only $m_1$ & 0.0227 $\pm$ 0.0019 & 0.0978 $\pm$ 0.0093 & 0.976 $\pm$ 0.012 \\
+\hline
+\texttt{drift\_strong} & Global margin & 0.6518 $\pm$ 0.0821 & 1.3619 $\pm$ 0.1381 & 0.628 $\pm$ 0.045 \\
+\texttt{drift\_strong} & No safety margin & 0.6518 $\pm$ 0.0821 & 1.3619 $\pm$ 0.1381 & 0.199 $\pm$ 0.037 \\
+\texttt{drift\_strong} & No interruption modeling & 0.6527 $\pm$ 0.0822 & 1.3674 $\pm$ 0.1390 & 0.628 $\pm$ 0.047 \\
+\texttt{drift\_strong} & Only $m_1$ & 0.7034 $\pm$ 0.0877 & 1.5403 $\pm$ 0.1590 & 0.616 $\pm$ 0.041 \\
+\hline
+\texttt{load\_high} & Global margin & 0.1348 $\pm$ 0.0129 & 0.4853 $\pm$ 0.0420 & 0.587 $\pm$ 0.055 \\
+\texttt{load\_high} & No safety margin & 0.1348 $\pm$ 0.0129 & 0.4853 $\pm$ 0.0420 & 0.133 $\pm$ 0.036 \\
+\texttt{load\_high} & No interruption modeling & 0.1358 $\pm$ 0.0129 & 0.4906 $\pm$ 0.0423 & 0.588 $\pm$ 0.056 \\
+\texttt{load\_high} & Only $m_1$ & 0.1606 $\pm$ 0.0136 & 0.5583 $\pm$ 0.0450 & 0.612 $\pm$ 0.051 \\
+\hline
+\texttt{vacation\_high} & Global margin & 0.0465 $\pm$ 0.0040 & 0.1752 $\pm$ 0.0154 & 0.864 $\pm$ 0.038 \\
+\texttt{vacation\_high} & No safety margin & 0.0465 $\pm$ 0.0040 & 0.1752 $\pm$ 0.0154 & 0.125 $\pm$ 0.042 \\
+\texttt{vacation\_high} & No interruption modeling & 0.0477 $\pm$ 0.0041 & 0.1818 $\pm$ 0.0158 & 0.860 $\pm$ 0.043 \\
+\texttt{vacation\_high} & Only $m_1$ & 0.0659 $\pm$ 0.0055 & 0.2456 $\pm$ 0.0185 & 0.867 $\pm$ 0.032 \\
+\hline
+\end{tabular}

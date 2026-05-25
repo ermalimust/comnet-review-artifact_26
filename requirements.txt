@@ -1,0 +1,3 @@
+# The DES and audit scripts use only the Python standard library.
+# Python 3.10+ is recommended.
+

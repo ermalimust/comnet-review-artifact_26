@@ -1,0 +1,25 @@
+\begin{tabular}{llccc}
+\hline
+Scenario & Method & Delay MAE (s) & Risk MAE (s) & Coverage \\
+\hline
+\texttt{overall} & Global margin & 0.0167 $\pm$ 0.0014 & 0.0610 $\pm$ 0.0078 & 0.968 $\pm$ 0.018 \\
+\texttt{overall} & Static queueing & 0.0378 $\pm$ 0.0023 & 0.0916 $\pm$ 0.0099 & 0.595 $\pm$ 0.026 \\
+\texttt{overall} & Oracle inputs (nominal) & 0.0110 $\pm$ 0.0010 & 0.0453 $\pm$ 0.0057 & 0.223 $\pm$ 0.022 \\
+\texttt{overall} & Black-box & 0.0165 $\pm$ 0.0014 & 0.0564 $\pm$ 0.0068 & 0.562 $\pm$ 0.041 \\
+\hline
+\texttt{drift\_strong} & Global margin & 0.6518 $\pm$ 0.0821 & 1.3619 $\pm$ 0.1381 & 0.628 $\pm$ 0.045 \\
+\texttt{drift\_strong} & Static queueing & 0.7705 $\pm$ 0.0937 & 1.7434 $\pm$ 0.1724 & 0.207 $\pm$ 0.028 \\
+\texttt{drift\_strong} & Oracle inputs (nominal) & 0.5294 $\pm$ 0.0596 & 1.0000 $\pm$ 0.1017 & 0.524 $\pm$ 0.036 \\
+\texttt{drift\_strong} & Black-box & 0.8534 $\pm$ 0.3580 & 4.2114 $\pm$ 6.9900 & 0.225 $\pm$ 0.041 \\
+\hline
+\texttt{load\_high} & Global margin & 0.1348 $\pm$ 0.0129 & 0.4853 $\pm$ 0.0420 & 0.587 $\pm$ 0.055 \\
+\texttt{load\_high} & Static queueing & 0.1546 $\pm$ 0.0137 & 0.5287 $\pm$ 0.0456 & 0.125 $\pm$ 0.020 \\
+\texttt{load\_high} & Oracle inputs (nominal) & 0.1891 $\pm$ 0.0156 & 0.5542 $\pm$ 0.0393 & 0.653 $\pm$ 0.028 \\
+\texttt{load\_high} & Black-box & 0.1471 $\pm$ 0.0142 & 0.4724 $\pm$ 0.0467 & 0.088 $\pm$ 0.026 \\
+\hline
+\texttt{vacation\_high} & Global margin & 0.0465 $\pm$ 0.0040 & 0.1752 $\pm$ 0.0154 & 0.864 $\pm$ 0.038 \\
+\texttt{vacation\_high} & Static queueing & 0.0597 $\pm$ 0.0051 & 0.2054 $\pm$ 0.0185 & 0.267 $\pm$ 0.031 \\
+\texttt{vacation\_high} & Oracle inputs (nominal) & 0.0311 $\pm$ 0.0144 & 0.1238 $\pm$ 0.0257 & 0.537 $\pm$ 0.025 \\
+\texttt{vacation\_high} & Black-box & 0.0456 $\pm$ 0.0052 & 0.1496 $\pm$ 0.0177 & 0.210 $\pm$ 0.052 \\
+\hline
+\end{tabular}

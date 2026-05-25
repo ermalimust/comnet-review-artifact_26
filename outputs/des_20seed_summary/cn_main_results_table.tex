@@ -1,0 +1,45 @@
+\begin{tabular}{llccc}
+\hline
+Scenario & Method & Delay MAE (s) & Risk MAE (s) & Coverage \\
+\hline
+\texttt{overall} & Adaptive margin (ours) & 0.0167 $\pm$ 0.0014 & 0.0610 $\pm$ 0.0078 & 0.969 $\pm$ 0.017 \\
+\texttt{overall} & Global margin & 0.0167 $\pm$ 0.0014 & 0.0610 $\pm$ 0.0078 & 0.968 $\pm$ 0.018 \\
+\texttt{overall} & Adaptive direct risk & 0.0165 $\pm$ 0.0014 & 0.0564 $\pm$ 0.0068 & 0.948 $\pm$ 0.026 \\
+\texttt{overall} & Direct conformal & 0.0165 $\pm$ 0.0014 & 0.0564 $\pm$ 0.0068 & 0.948 $\pm$ 0.026 \\
+\texttt{overall} & Direct $p95$ conformal & 0.0165 $\pm$ 0.0014 & 0.0561 $\pm$ 0.0078 & 0.875 $\pm$ 0.033 \\
+\texttt{overall} & EWMA persistence & 0.0370 $\pm$ 0.0031 & 0.1071 $\pm$ 0.0140 & 0.964 $\pm$ 0.019 \\
+\texttt{overall} & Kingman no interruption & 0.0227 $\pm$ 0.0019 & 0.0978 $\pm$ 0.0093 & 0.976 $\pm$ 0.012 \\
+\texttt{overall} & Tail regression & 0.0165 $\pm$ 0.0014 & 0.0561 $\pm$ 0.0078 & 0.956 $\pm$ 0.023 \\
+\texttt{overall} & Static queueing & 0.0378 $\pm$ 0.0023 & 0.0916 $\pm$ 0.0099 & 0.595 $\pm$ 0.026 \\
+\hline
+\texttt{drift\_strong} & Adaptive margin (ours) & 0.6518 $\pm$ 0.0821 & 1.3619 $\pm$ 0.1381 & 0.699 $\pm$ 0.037 \\
+\texttt{drift\_strong} & Global margin & 0.6518 $\pm$ 0.0821 & 1.3619 $\pm$ 0.1381 & 0.628 $\pm$ 0.045 \\
+\texttt{drift\_strong} & Adaptive direct risk & 0.8534 $\pm$ 0.3580 & 4.2114 $\pm$ 6.9900 & 0.627 $\pm$ 0.047 \\
+\texttt{drift\_strong} & Direct conformal & 0.8534 $\pm$ 0.3580 & 4.2114 $\pm$ 6.9900 & 0.556 $\pm$ 0.049 \\
+\texttt{drift\_strong} & Direct $p95$ conformal & 0.8534 $\pm$ 0.3580 & 1.8432 $\pm$ 0.8213 & 0.549 $\pm$ 0.043 \\
+\texttt{drift\_strong} & EWMA persistence & 1.0220 $\pm$ 0.1314 & 2.0908 $\pm$ 0.2181 & 0.777 $\pm$ 0.024 \\
+\texttt{drift\_strong} & Kingman no interruption & 0.7034 $\pm$ 0.0877 & 1.5403 $\pm$ 0.1590 & 0.616 $\pm$ 0.041 \\
+\texttt{drift\_strong} & Tail regression & 0.8534 $\pm$ 0.3580 & 1.6446 $\pm$ 0.3566 & 0.598 $\pm$ 0.047 \\
+\texttt{drift\_strong} & Static queueing & 0.7705 $\pm$ 0.0937 & 1.7434 $\pm$ 0.1724 & 0.207 $\pm$ 0.028 \\
+\hline
+\texttt{load\_high} & Adaptive margin (ours) & 0.1348 $\pm$ 0.0129 & 0.4853 $\pm$ 0.0420 & 0.685 $\pm$ 0.055 \\
+\texttt{load\_high} & Global margin & 0.1348 $\pm$ 0.0129 & 0.4853 $\pm$ 0.0420 & 0.587 $\pm$ 0.055 \\
+\texttt{load\_high} & Adaptive direct risk & 0.1471 $\pm$ 0.0142 & 0.4724 $\pm$ 0.0467 & 0.571 $\pm$ 0.066 \\
+\texttt{load\_high} & Direct conformal & 0.1471 $\pm$ 0.0142 & 0.4724 $\pm$ 0.0467 & 0.483 $\pm$ 0.063 \\
+\texttt{load\_high} & Direct $p95$ conformal & 0.1471 $\pm$ 0.0142 & 0.4940 $\pm$ 0.0469 & 0.381 $\pm$ 0.046 \\
+\texttt{load\_high} & EWMA persistence & 0.1549 $\pm$ 0.0147 & 0.5294 $\pm$ 0.0433 & 0.827 $\pm$ 0.037 \\
+\texttt{load\_high} & Kingman no interruption & 0.1606 $\pm$ 0.0136 & 0.5583 $\pm$ 0.0450 & 0.612 $\pm$ 0.051 \\
+\texttt{load\_high} & Tail regression & 0.1471 $\pm$ 0.0142 & 0.4940 $\pm$ 0.0469 & 0.516 $\pm$ 0.058 \\
+\texttt{load\_high} & Static queueing & 0.1546 $\pm$ 0.0137 & 0.5287 $\pm$ 0.0456 & 0.125 $\pm$ 0.020 \\
+\hline
+\texttt{vacation\_high} & Adaptive margin (ours) & 0.0465 $\pm$ 0.0040 & 0.1752 $\pm$ 0.0154 & 0.939 $\pm$ 0.025 \\
+\texttt{vacation\_high} & Global margin & 0.0465 $\pm$ 0.0040 & 0.1752 $\pm$ 0.0154 & 0.864 $\pm$ 0.038 \\
+\texttt{vacation\_high} & Adaptive direct risk & 0.0456 $\pm$ 0.0052 & 0.1496 $\pm$ 0.0177 & 0.879 $\pm$ 0.041 \\
+\texttt{vacation\_high} & Direct conformal & 0.0456 $\pm$ 0.0052 & 0.1496 $\pm$ 0.0177 & 0.797 $\pm$ 0.055 \\
+\texttt{vacation\_high} & Direct $p95$ conformal & 0.0456 $\pm$ 0.0052 & 0.1724 $\pm$ 0.0137 & 0.697 $\pm$ 0.054 \\
+\texttt{vacation\_high} & EWMA persistence & 0.0645 $\pm$ 0.0060 & 0.2250 $\pm$ 0.0205 & 0.947 $\pm$ 0.020 \\
+\texttt{vacation\_high} & Kingman no interruption & 0.0659 $\pm$ 0.0055 & 0.2456 $\pm$ 0.0185 & 0.867 $\pm$ 0.032 \\
+\texttt{vacation\_high} & Tail regression & 0.0456 $\pm$ 0.0052 & 0.1724 $\pm$ 0.0137 & 0.815 $\pm$ 0.053 \\
+\texttt{vacation\_high} & Static queueing & 0.0597 $\pm$ 0.0051 & 0.2054 $\pm$ 0.0185 & 0.267 $\pm$ 0.031 \\
+\hline
+\end{tabular}

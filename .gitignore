@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.pdf
+outputs/des_seed*_margin22/
+outputs/ns3_validation_extended/packets/
+*.zip
+*.7z
+

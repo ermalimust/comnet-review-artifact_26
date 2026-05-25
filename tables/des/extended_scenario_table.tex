@@ -1,0 +1,50 @@
+\begin{tabular}{llcccc}
+\hline
+Scenario & Method & AUROC & R@10\% & Coverage & Risk MAE (s) \\
+\hline
+\texttt{overall} & Adaptive margin (ours) & 0.868 $\pm$ 0.026 & 0.444 $\pm$ 0.070 & 0.969 $\pm$ 0.017 & 0.0610 $\pm$ 0.0078 \\
+\texttt{overall} & Direct conformal & 0.873 $\pm$ 0.025 & 0.444 $\pm$ 0.065 & 0.948 $\pm$ 0.026 & 0.0564 $\pm$ 0.0068 \\
+\texttt{overall} & EWMA persistence & 0.476 $\pm$ 0.050 & 0.078 $\pm$ 0.046 & 0.964 $\pm$ 0.019 & 0.1071 $\pm$ 0.0140 \\
+\texttt{overall} & Kingman no interruption & 0.864 $\pm$ 0.028 & 0.438 $\pm$ 0.076 & 0.976 $\pm$ 0.012 & 0.0978 $\pm$ 0.0093 \\
+\hline
+\texttt{load\_low} & Adaptive margin (ours) & 0.890 $\pm$ 0.021 & 0.484 $\pm$ 0.084 & 0.992 $\pm$ 0.007 & 0.0363 $\pm$ 0.0040 \\
+\texttt{load\_low} & Direct conformal & 0.896 $\pm$ 0.020 & 0.490 $\pm$ 0.089 & 0.985 $\pm$ 0.012 & 0.0463 $\pm$ 0.0040 \\
+\texttt{load\_low} & EWMA persistence & 0.497 $\pm$ 0.058 & 0.094 $\pm$ 0.061 & 0.987 $\pm$ 0.010 & 0.0691 $\pm$ 0.0057 \\
+\texttt{load\_low} & Kingman no interruption & 0.886 $\pm$ 0.021 & 0.472 $\pm$ 0.085 & 0.994 $\pm$ 0.006 & 0.0493 $\pm$ 0.0038 \\
+\hline
+\texttt{load\_high} & Adaptive margin (ours) & 0.795 $\pm$ 0.033 & 0.240 $\pm$ 0.069 & 0.685 $\pm$ 0.055 & 0.4853 $\pm$ 0.0420 \\
+\texttt{load\_high} & Direct conformal & 0.815 $\pm$ 0.024 & 0.350 $\pm$ 0.063 & 0.483 $\pm$ 0.063 & 0.4724 $\pm$ 0.0467 \\
+\texttt{load\_high} & EWMA persistence & 0.467 $\pm$ 0.064 & 0.088 $\pm$ 0.068 & 0.827 $\pm$ 0.037 & 0.5294 $\pm$ 0.0433 \\
+\texttt{load\_high} & Kingman no interruption & 0.779 $\pm$ 0.034 & 0.210 $\pm$ 0.078 & 0.612 $\pm$ 0.051 & 0.5583 $\pm$ 0.0450 \\
+\hline
+\texttt{vacation\_low} & Adaptive margin (ours) & 0.878 $\pm$ 0.034 & 0.434 $\pm$ 0.107 & 0.979 $\pm$ 0.012 & 0.0455 $\pm$ 0.0061 \\
+\texttt{vacation\_low} & Direct conformal & 0.881 $\pm$ 0.034 & 0.440 $\pm$ 0.093 & 0.965 $\pm$ 0.019 & 0.0479 $\pm$ 0.0060 \\
+\texttt{vacation\_low} & EWMA persistence & 0.501 $\pm$ 0.064 & 0.104 $\pm$ 0.061 & 0.977 $\pm$ 0.016 & 0.0899 $\pm$ 0.0117 \\
+\texttt{vacation\_low} & Kingman no interruption & 0.875 $\pm$ 0.035 & 0.436 $\pm$ 0.101 & 0.986 $\pm$ 0.010 & 0.0743 $\pm$ 0.0075 \\
+\hline
+\texttt{vacation\_high} & Adaptive margin (ours) & 0.856 $\pm$ 0.026 & 0.412 $\pm$ 0.085 & 0.939 $\pm$ 0.025 & 0.1752 $\pm$ 0.0154 \\
+\texttt{vacation\_high} & Direct conformal & 0.853 $\pm$ 0.026 & 0.416 $\pm$ 0.086 & 0.797 $\pm$ 0.055 & 0.1496 $\pm$ 0.0177 \\
+\texttt{vacation\_high} & EWMA persistence & 0.494 $\pm$ 0.070 & 0.082 $\pm$ 0.044 & 0.947 $\pm$ 0.020 & 0.2250 $\pm$ 0.0205 \\
+\texttt{vacation\_high} & Kingman no interruption & 0.851 $\pm$ 0.027 & 0.416 $\pm$ 0.080 & 0.867 $\pm$ 0.032 & 0.2456 $\pm$ 0.0185 \\
+\hline
+\texttt{drift\_mild} & Adaptive margin (ours) & 0.855 $\pm$ 0.042 & 0.422 $\pm$ 0.082 & 0.934 $\pm$ 0.026 & 0.1993 $\pm$ 0.0248 \\
+\texttt{drift\_mild} & Direct conformal & 0.850 $\pm$ 0.041 & 0.402 $\pm$ 0.080 & 0.855 $\pm$ 0.037 & 0.1872 $\pm$ 0.0286 \\
+\texttt{drift\_mild} & EWMA persistence & 0.521 $\pm$ 0.065 & 0.110 $\pm$ 0.074 & 0.936 $\pm$ 0.022 & 0.3126 $\pm$ 0.0505 \\
+\texttt{drift\_mild} & Kingman no interruption & 0.852 $\pm$ 0.042 & 0.420 $\pm$ 0.075 & 0.906 $\pm$ 0.028 & 0.2382 $\pm$ 0.0296 \\
+\hline
+\texttt{drift\_strong} & Adaptive margin (ours) & 0.828 $\pm$ 0.047 & 0.442 $\pm$ 0.089 & 0.699 $\pm$ 0.037 & 1.3619 $\pm$ 0.1381 \\
+\texttt{drift\_strong} & Direct conformal & 0.771 $\pm$ 0.054 & 0.248 $\pm$ 0.098 & 0.556 $\pm$ 0.049 & 4.2114 $\pm$ 6.9900 \\
+\texttt{drift\_strong} & EWMA persistence & 0.483 $\pm$ 0.057 & 0.074 $\pm$ 0.057 & 0.777 $\pm$ 0.024 & 2.0908 $\pm$ 0.2181 \\
+\texttt{drift\_strong} & Kingman no interruption & 0.826 $\pm$ 0.048 & 0.432 $\pm$ 0.088 & 0.616 $\pm$ 0.041 & 1.5403 $\pm$ 0.1590 \\
+\hline
+\texttt{traffic\_mix\_video\_heavy} & Adaptive margin (ours) & 0.813 $\pm$ 0.050 & 0.382 $\pm$ 0.101 & 0.943 $\pm$ 0.023 & 0.0879 $\pm$ 0.0083 \\
+\texttt{traffic\_mix\_video\_heavy} & Direct conformal & 0.818 $\pm$ 0.047 & 0.386 $\pm$ 0.096 & 0.908 $\pm$ 0.039 & 0.0798 $\pm$ 0.0074 \\
+\texttt{traffic\_mix\_video\_heavy} & EWMA persistence & 0.502 $\pm$ 0.063 & 0.096 $\pm$ 0.063 & 0.953 $\pm$ 0.021 & 0.1279 $\pm$ 0.0141 \\
+\texttt{traffic\_mix\_video\_heavy} & Kingman no interruption & 0.806 $\pm$ 0.051 & 0.376 $\pm$ 0.102 & 0.956 $\pm$ 0.024 & 0.1372 $\pm$ 0.0102 \\
+\hline
+\texttt{traffic\_mix\_c2\_heavy} & Adaptive margin (ours) & 0.955 $\pm$ 0.013 & 0.632 $\pm$ 0.063 & 0.980 $\pm$ 0.013 & 0.0467 $\pm$ 0.0069 \\
+\texttt{traffic\_mix\_c2\_heavy} & Direct conformal & 0.957 $\pm$ 0.012 & 0.640 $\pm$ 0.071 & 0.968 $\pm$ 0.017 & 0.0391 $\pm$ 0.0066 \\
+\texttt{traffic\_mix\_c2\_heavy} & EWMA persistence & 0.489 $\pm$ 0.065 & 0.092 $\pm$ 0.069 & 0.974 $\pm$ 0.015 & 0.0810 $\pm$ 0.0127 \\
+\texttt{traffic\_mix\_c2\_heavy} & Kingman no interruption & 0.954 $\pm$ 0.013 & 0.638 $\pm$ 0.073 & 0.985 $\pm$ 0.011 & 0.0744 $\pm$ 0.0076 \\
+\hline
+\end{tabular}

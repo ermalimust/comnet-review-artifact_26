@@ -1,0 +1,167 @@
+\documentclass[tikz,border=4pt]{standalone}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
+\definecolor{proposedblue}{RGB}{46,94,170}
+\definecolor{staticgray}{RGB}{128,136,148}
+\definecolor{oraclegreen}{RGB}{69,145,98}
+\definecolor{blackboxorange}{RGB}{218,132,55}
+\definecolor{nomarginred}{RGB}{186,78,68}
+\definecolor{vacationgold}{RGB}{204,151,55}
+\definecolor{monepurple}{RGB}{126,93,159}
+\definecolor{tealgreen}{RGB}{35,143,135}
+\definecolor{deepviolet}{RGB}{98,80,154}
+\begin{document}
+
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=2 by 2, horizontal sep=1.15cm, vertical sep=1.80cm},
+    width=3.55in,
+    height=2.45in,
+    ymajorgrids=true,
+    xmajorgrids=false,
+    grid style={black!12},
+    axis x line*=bottom,
+    axis y line*=left,
+    axis line style={black!65, line width=0.45pt},
+    tick style={black!65, line width=0.45pt},
+    label style={font=\scriptsize},
+    tick label style={font=\scriptsize},
+    title style={font=\small, yshift=-0.5ex},
+]
+\nextgroupplot[
+    title={(a) NS-3 risk error},
+    ybar,
+    ymin=0,
+    ymax=0.417,
+    ylabel={Risk MAE},
+    symbolic x coords={ns3_lagged_safe,ns3_direct_nomargin,ns3_ewma_safe,ns3_background_rate},
+    xtick={ns3_lagged_safe,ns3_direct_nomargin,ns3_ewma_safe,ns3_background_rate},
+    xticklabels={{Lagged cal.},{Lagged no margin},{EWMA cal.},{Background}},
+    x tick label style={font=\scriptsize, rotate=22, anchor=east},
+    enlarge x limits=0.16,
+    legend style={at={(0.5,1.28)}, anchor=south, legend columns=4, draw=none, fill=none, font=\scriptsize},
+]
+\addplot+[ybar, bar width=8pt, fill=tealgreen, draw=black!45, line width=0.2pt] coordinates {
+(ns3_lagged_safe,0.0829)
+};
+\addlegendentry{Lagged cal.}
+
+\addplot+[ybar, bar width=8pt, fill=nomarginred, draw=black!45, line width=0.2pt] coordinates {
+(ns3_direct_nomargin,0.0829)
+};
+\addlegendentry{Lagged no margin}
+
+\addplot+[ybar, bar width=8pt, fill=monepurple, draw=black!45, line width=0.2pt] coordinates {
+(ns3_ewma_safe,0.0588)
+};
+\addlegendentry{EWMA cal.}
+
+\addplot+[ybar, bar width=8pt, fill=staticgray, draw=black!45, line width=0.2pt] coordinates {
+(ns3_background_rate,0.3531)
+};
+\addlegendentry{Background}
+
+
+\nextgroupplot[
+    title={(b) NS-3 tail-delay error},
+    ybar,
+    ymin=0,
+    ymax=0.676,
+    ylabel={$p95$ MAE (ms)},
+    symbolic x coords={ns3_lagged_safe,ns3_direct_nomargin,ns3_ewma_safe,ns3_background_rate},
+    xtick={ns3_lagged_safe,ns3_direct_nomargin,ns3_ewma_safe,ns3_background_rate},
+    xticklabels={{Lagged cal.},{Lagged no margin},{EWMA cal.},{Background}},
+    x tick label style={font=\scriptsize, rotate=22, anchor=east},
+    enlarge x limits=0.16,
+]
+\addplot+[ybar, bar width=8pt, fill=tealgreen, draw=black!45, line width=0.2pt] coordinates {
+(ns3_lagged_safe,0.4688)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=nomarginred, draw=black!45, line width=0.2pt] coordinates {
+(ns3_direct_nomargin,0.4688)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=monepurple, draw=black!45, line width=0.2pt] coordinates {
+(ns3_ewma_safe,0.5730)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=staticgray, draw=black!45, line width=0.2pt] coordinates {
+(ns3_background_rate,0.4688)
+};
+
+
+
+\nextgroupplot[
+    title={(c) Held-out coverage},
+    ybar,
+    ymin=0,
+    ymax=1.080,
+    ylabel={Coverage},
+    symbolic x coords={ns3_lagged_safe,ns3_direct_nomargin,ns3_ewma_safe,ns3_background_rate},
+    xtick={ns3_lagged_safe,ns3_direct_nomargin,ns3_ewma_safe,ns3_background_rate},
+    xticklabels={{Lagged cal.},{Lagged no margin},{EWMA cal.},{Background}},
+    x tick label style={font=\scriptsize, rotate=22, anchor=east},
+    enlarge x limits=0.16,
+]
+\addplot+[ybar, bar width=8pt, fill=tealgreen, draw=black!45, line width=0.2pt] coordinates {
+(ns3_lagged_safe,0.8958)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=nomarginred, draw=black!45, line width=0.2pt] coordinates {
+(ns3_direct_nomargin,0.6111)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=monepurple, draw=black!45, line width=0.2pt] coordinates {
+(ns3_ewma_safe,0.8958)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=staticgray, draw=black!45, line width=0.2pt] coordinates {
+(ns3_background_rate,0.8472)
+};
+
+
+\addplot+[black!55, densely dashed, line width=0.6pt, mark=none, forget plot] coordinates {(ns3_lagged_safe,0.90) (ns3_background_rate,0.90)};
+
+\nextgroupplot[
+    title={(d) High-risk recall},
+    ybar,
+    ymin=0,
+    ymax=1.020,
+    ylabel={R@10\%},
+    symbolic x coords={ns3_lagged_safe,ns3_direct_nomargin,ns3_ewma_safe,ns3_background_rate},
+    xtick={ns3_lagged_safe,ns3_direct_nomargin,ns3_ewma_safe,ns3_background_rate},
+    xticklabels={{Lagged cal.},{Lagged no margin},{EWMA cal.},{Background}},
+    x tick label style={font=\scriptsize, rotate=22, anchor=east},
+    enlarge x limits=0.16,
+]
+\addplot+[ybar, bar width=8pt, fill=tealgreen, draw=black!45, line width=0.2pt] coordinates {
+(ns3_lagged_safe,0.7000)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=nomarginred, draw=black!45, line width=0.2pt] coordinates {
+(ns3_direct_nomargin,0.7000)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=monepurple, draw=black!45, line width=0.2pt] coordinates {
+(ns3_ewma_safe,0.7500)
+};
+
+
+\addplot+[ybar, bar width=8pt, fill=staticgray, draw=black!45, line width=0.2pt] coordinates {
+(ns3_background_rate,0.0000)
+};
+
+
+\end{groupplot}
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,121 @@
+\documentclass[tikz,border=4pt]{standalone}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
+\definecolor{proposedblue}{RGB}{46,94,170}
+\definecolor{staticgray}{RGB}{128,136,148}
+\definecolor{oraclegreen}{RGB}{69,145,98}
+\definecolor{blackboxorange}{RGB}{218,132,55}
+\definecolor{nomarginred}{RGB}{186,78,68}
+\definecolor{vacationgold}{RGB}{204,151,55}
+\definecolor{monepurple}{RGB}{126,93,159}
+\definecolor{tealgreen}{RGB}{35,143,135}
+\definecolor{deepviolet}{RGB}{98,80,154}
+\begin{document}
+
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=2 by 2, horizontal sep=1.10cm, vertical sep=1.80cm},
+    width=3.55in,
+    height=2.45in,
+    ymajorgrids=true,
+    grid style={black!12},
+    axis x line*=bottom,
+    axis y line*=left,
+    axis line style={black!65, line width=0.45pt},
+    tick style={black!65, line width=0.45pt},
+    label style={font=\scriptsize},
+    tick label style={font=\scriptsize},
+    title style={font=\small, yshift=-0.5ex},
+]
+\nextgroupplot[
+    title={(a) Risk--$p95$ association},
+    ybar,
+    ymin=-0.050,
+    ymax=1.020,
+    ylabel={Spearman $\rho_s$},
+    symbolic x coords={overall,load_high,vacation_high,drift_strong,traffic_mix_video_heavy,traffic_mix_c2_heavy},
+    xtick=data,
+    xticklabels={{Overall},{High\\load},{High\\vacation},{Strong\\drift},{Video\\heavy},{C2\\heavy}},
+    x tick label style={font=\scriptsize, align=center, text depth=0.25ex},
+    enlarge x limits=0.12,
+    xmajorgrids=false,
+]
+\addplot+[ybar, bar width=7pt, fill=proposedblue, draw=black!45, line width=0.2pt] coordinates {
+(overall,0.9907)
+(load_high,0.9870)
+(vacation_high,0.9887)
+(drift_strong,0.9954)
+(traffic_mix_video_heavy,0.9826)
+(traffic_mix_c2_heavy,0.9898)
+};
+
+\nextgroupplot[
+    title={(b) Risk--violation association},
+    ybar,
+    ymin=-0.050,
+    ymax=1.020,
+    ylabel={Spearman $\rho_s$},
+    symbolic x coords={overall,load_high,vacation_high,drift_strong,traffic_mix_video_heavy,traffic_mix_c2_heavy},
+    xtick=data,
+    xticklabels={{Overall},{High\\load},{High\\vacation},{Strong\\drift},{Video\\heavy},{C2\\heavy}},
+    x tick label style={font=\scriptsize, align=center, text depth=0.25ex},
+    enlarge x limits=0.12,
+    xmajorgrids=false,
+]
+\addplot+[ybar, bar width=7pt, fill=nomarginred, draw=black!45, line width=0.2pt] coordinates {
+(overall,0.7092)
+(load_high,0.9794)
+(vacation_high,0.9231)
+(drift_strong,0.9770)
+(traffic_mix_video_heavy,0.8101)
+(traffic_mix_c2_heavy,0.5365)
+};
+
+\nextgroupplot[
+    title={(c) Top-risk $p95$ lift},
+    ybar,
+    ymin=0.000,
+    ymax=10.188,
+    ylabel={Top decile / rest},
+    symbolic x coords={overall,load_high,vacation_high,drift_strong,traffic_mix_video_heavy,traffic_mix_c2_heavy},
+    xtick=data,
+    xticklabels={{Overall},{High\\load},{High\\vacation},{Strong\\drift},{Video\\heavy},{C2\\heavy}},
+    x tick label style={font=\scriptsize, align=center, text depth=0.25ex},
+    enlarge x limits=0.12,
+    xmajorgrids=false,
+]
+\addplot+[ybar, bar width=7pt, fill=oraclegreen, draw=black!45, line width=0.2pt] coordinates {
+(overall,2.6941)
+(load_high,2.8823)
+(vacation_high,2.5673)
+(drift_strong,8.8589)
+(traffic_mix_video_heavy,2.4805)
+(traffic_mix_c2_heavy,3.1652)
+};
+\addplot+[black!55, densely dashed, line width=0.6pt, mark=none, forget plot] coordinates {(overall,1.0) (traffic_mix_c2_heavy,1.0)};
+
+\nextgroupplot[
+    title={(d) Top-risk violation gap},
+    ybar,
+    ymin=0.000,
+    ymax=0.796,
+    ylabel={Top decile $-$ rest},
+    symbolic x coords={overall,load_high,vacation_high,drift_strong,traffic_mix_video_heavy,traffic_mix_c2_heavy},
+    xtick=data,
+    xticklabels={{Overall},{High\\load},{High\\vacation},{Strong\\drift},{Video\\heavy},{C2\\heavy}},
+    x tick label style={font=\scriptsize, align=center, text depth=0.25ex},
+    enlarge x limits=0.12,
+    xmajorgrids=false,
+]
+\addplot+[ybar, bar width=7pt, fill=blackboxorange, draw=black!45, line width=0.2pt] coordinates {
+(overall,0.1041)
+(load_high,0.5628)
+(vacation_high,0.2516)
+(drift_strong,0.6926)
+(traffic_mix_video_heavy,0.1354)
+(traffic_mix_c2_heavy,0.0736)
+};
+\end{groupplot}
+\end{tikzpicture}
+\end{document}
